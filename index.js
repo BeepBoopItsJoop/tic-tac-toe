@@ -1,58 +1,68 @@
  const gameBoard = (() => {
-    const boardArray = ['X', 'O', 'O', 'X', 'O', 'X', 'X', 'O', 'X']
+    const boardArray = new Array(9)
     const getBoard = () => boardArray
+
+    // sets a square(pos) to the selected player's sign(player)
+    const setBoard = (pos, player) => {
+        const HTMLField = document.querySelector(`.container div:nth-child(${pos + 1})`)
+        playerSign = player.getSign()
+        HTMLField.innerText = boardArray[pos] = playerSign
+    }
+
     return {
-        getBoard
+        getBoard,
+        setBoard
     }
  })()
 
- const displayController = (() => {
+const Player = (isFirst, isBot) => {
+    let sign
+    if (isFirst) sign = 'X'; else sign = 'O'
+
+    const getSign = () => sign
+
+    return {
+        isFirst, 
+        isBot, 
+        getSign
+    }
+}
+
+let Player1 = Player(true, false)
+let Player2 = Player(false, false)
+
+const displayController = (() => {
     const list = document.querySelector('.container').children
+    const boardArray = gameBoard.getBoard()
+
+
+    const init = () => {
+        // for (let i = 0; i < list.length; i++) {
+        //     list[i].addEventListener('click', setBoard())
+        // }
+    }
 
     const update = () => {
-        const boardArray = gameBoard.getBoard()
         const displayArray = list
         for (let i = 0; i < displayArray.length; i++) {
             displayArray[i].innerText = boardArray[i]
             
         }
     }
+
     return {
         update,
     }
  })()
- displayController.update()
 
+const gameController = (() => {
+    let stepCount = 1
 
-
-
-const Player = (isFirst, isBot) => {
-    let score
+    const makeStep = () => {
     
-
-    // const isFirst = () => isFirst
-    // const isBot = () => isBot
-
-    const getSign = () => {
-        let sign 
-        if (isFirst) {
-            sign = 'X'
-        } else {
-            sign = 'O'
-        }
-        return sign
     }
 
-    const makePick = (boardPos) => {
-        
+    return {
+
     }
-
-    return {isFirst, isBot, getSign, makePick}
-}
-
-let Player1 = Player(true, false)
-let Player2 = Player(false, false)
-
-// for (let i = 0; i < list.length; i++) {
-//     list[i].addEventListener('click', Player.makePick(e))
-// }
+})()
