@@ -55,14 +55,20 @@ const displayController = (() => {
     }
  })()
 
-const gameController = (() => {
-    let stepCount = 1
+ const gameController = (() => {
+    let firstPlayerTurn = true
 
-    const makeStep = () => {
-    
+
+    const makeStep = (pos) => {
+        let player
+        if(firstPlayerTurn) player = Player1;
+        else player = Player2
+
+        gameBoard.setBoard(pos, player)
+        firstPlayerTurn = !firstPlayerTurn;
     }
 
     return {
-
+        makeStep
     }
 })()
