@@ -1,74 +1,66 @@
  const gameBoard = (() => {
     const boardArray = new Array(9)
+
     const getBoard = () => boardArray
 
-    // sets a square(pos) to the selected player's sign(player)
-    const setBoard = (pos, player) => {
-        const HTMLField = document.querySelector(`.container div:nth-child(${pos + 1})`)
-        playerSign = player.getSign()
-        HTMLField.innerText = boardArray[pos] = playerSign
-    }
+    const setBoard = (pos, sign) => {
+        boardArray[pos] = sign
+    } 
+
+    const reset = () => {boardArray = new Array(9)}
 
     return {
         getBoard,
-        setBoard
+        setBoard,
+        reset,
     }
  })()
 
-const Player = (isFirst, isBot) => {
-    let sign
-    if (isFirst) sign = 'X'; else sign = 'O'
+const Player = (sign) => {
 
     const getSign = () => sign
 
     return {
-        isFirst, 
-        isBot, 
-        getSign
+        getSign,
     }
 }
 
-let Player1 = Player(true, false)
-let Player2 = Player(false, false)
+
+const gameController = (() => {
+    
+    const playerX = Player('X')
+    const playerO = Player('O')
+
+    let round = 1
+    let isOver = false
+
+    const playRound = (pos) => {
+
+        gameBoard.setBoard(pos, getCurrentSign())
+        document.querySelector('data-index')
+
+        round++
+
+    }
+
+    const getCurrentSign = () => {
+        return round % 2 === 1 ? playerX.getSign() : playerO.getSign();
+    }
+
+
+    const reset = () => {
+        round = 1
+        isOver = false
+    }
+
+    return {
+        playRound,
+        reset
+    }
+
+})()
 
 const displayController = (() => {
-    const list = document.querySelector('.container').children
-    const boardArray = gameBoard.getBoard()
-
-
-    const init = () => {
-        // for (let i = 0; i < list.length; i++) {
-        //     list[i].addEventListener('click', setBoard())
-        // }
-    }
-
-    const update = () => {
-        const displayArray = list
-        for (let i = 0; i < displayArray.length; i++) {
-            displayArray[i].innerText = boardArray[i]
-            
-        }
-    }
-
-    return {
-        update,
-    }
+    
+    return {}
  })()
-
- const gameController = (() => {
-    let firstPlayerTurn = true
-
-
-    const makeStep = (pos) => {
-        let player
-        if(firstPlayerTurn) player = Player1;
-        else player = Player2
-
-        gameBoard.setBoard(pos, player)
-        firstPlayerTurn = !firstPlayerTurn;
-    }
-
-    return {
-        makeStep
-    }
-})()

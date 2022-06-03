@@ -4,3 +4,7 @@
     grid-template-rows: repeat(3, 1fr);
     gap: 20px;
 }
+
+.container div {
+    border: 2px solid black;
+}           
