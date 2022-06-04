@@ -4,6 +4,7 @@
     const getBoard = () => boardArray
 
     const setBoard = (pos, sign) => {
+        if (pos > boardArray.length) return;
         boardArray[pos] = sign
     } 
 
@@ -25,7 +26,6 @@ const Player = (sign) => {
     }
 }
 
-
 const gameController = (() => {
     
     const playerX = Player('X')
@@ -38,10 +38,10 @@ const gameController = (() => {
         if (gameBoard.getBoard()[pos] !== undefined) {console.log('field alreay played'); return}
 
         gameBoard.setBoard(pos, getCurrentSign())
-        checkWinner(pos)
         // TODO
         // DOM METHOD
 
+        checkWinner()
         round++
 
         if (round > 9) {
@@ -57,30 +57,20 @@ const gameController = (() => {
         return round % 2 === 1 ? playerX.getSign() : playerO.getSign();
     }
 
-    const checkWinner = (fieldIndex) => {
-        // const winConditions = [
-        //   [0, 1, 2],
-        //   [3, 4, 5],
-        //   [6, 7, 8],
-        //   [0, 3, 6],
-        //   [1, 4, 7],
-        //   [2, 5, 8],
-        //   [0, 4, 8],
-        //   [2, 4, 6],
-        // ];
+    const winConditions = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
 
-    // copy pasted code, dw bout it ↓
-
-    //     console.log(winConditions.filter((combination) => combination.includes(fieldIndex)))
-
-    //     return winConditions
-    //       .filter((combination) => combination.includes(fieldIndex))
-    //       .some((possibleCombination) =>
-    //         possibleCombination.every(
-    //           (index) => gameBoard.getField(index) === getCurrentPlayerSign()
-    //         )
-    //       );
-      };
+    const checkWinner = () => {
+       
+    }
 
     const reset = () => {
         round = 1
@@ -100,7 +90,7 @@ const displayController = (() => {
     
     for (let i = 0; i < fieldList.length; i++) {
         fieldList[i].addEventListener('click', (e) => {
-            gameController.playRound(e.target.dataset.index)
+            gameController.playRound(parseInt(e.target.dataset.index))
         })
     }
 
