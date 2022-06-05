@@ -1,5 +1,5 @@
  const gameBoard = (() => {
-    const boardArray = new Array(9)
+    let boardArray = new Array(9)
 
     const getBoard = () => boardArray
 
@@ -41,7 +41,10 @@ const gameController = (() => {
         // TODO
         // DOM METHOD
 
-        checkWinner()
+        if(checkWinner() === true) {
+            gameBoard.reset()
+            gameController.reset()
+        }
         round++
 
         if (round > 9) {
@@ -68,8 +71,16 @@ const gameController = (() => {
         [2, 4, 6]
     ];
 
+    // TODO
+    // rewrite this someday 
     const checkWinner = () => {
-       
+        winConditions.forEach((item, index) => { // [0, 1, 2, 3, 4, 5, 6, 7]
+            if (gameBoard.getBoard()[item[0]] === getCurrentSign() && gameBoard.getBoard()[item[1]] === getCurrentSign() && gameBoard.getBoard()[item[2]] === getCurrentSign()) {
+                console.log('winner!');
+                gameBoard.reset()
+                gameController.reset()
+            } 
+        })
     }
 
     const reset = () => {
@@ -80,6 +91,7 @@ const gameController = (() => {
     return {
         playRound,
         reset,
+        checkWinner
     }
 
 })()
