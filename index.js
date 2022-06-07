@@ -37,17 +37,19 @@ const gameController = (() => {
     const playRound = (index) => {
         // Prevent playing a field more than once.
         if (gameBoard.get()[index] !== undefined) return
-        if (isOver) {
-            console.log('game over')
-        return
-    }
+        if (isOver) {console.log('game over'); return}
 
         let currentSign = getCurrentSign()
+
+        displayController.updateFieldText(currentSign, index)
         gameBoard.setField(index, currentSign)
 
         checkWinner()
 
+        // if (isOver) playertext method
+
         round++
+        displayController.updatePlayerText(getCurrentSign())
 
         if (round > 9) {
             // TODO DOM METHOD
@@ -88,6 +90,8 @@ const gameController = (() => {
         round = 1
         isOver = false
         
+        displayController.updatePlayerText(getCurrentSign())
+
         gameBoard.reset();
         displayController.reset()
     }
@@ -111,25 +115,32 @@ const displayController = (() => {
             gameController.playRound(parseInt(e.target.dataset.index))
             })
         }
+ 
+        document.querySelector('.reset') .addEventListener('click', gameController.reset)
 
-        const resetButton = document.querySelector('.reset') 
-        resetButton.addEventListener('click', gameController.reset)
+        document.querySelector('.playerText').innerText = 'X'
     })()
     
 
-    const updatePlayerText = (playerSign, fieldIndex) => {
-        const playerText = document.querySelector('.playerText')
-
-        playerText.innerHTML = playerSign
+    const updateFieldText = (playerSign, fieldIndex) => {
         fieldList[fieldIndex].innerText = playerSign
     }
 
-    const reset = () => {
+    const updatePlayerText = (playerSign) => {
+        const playerText = document.querySelector('.playerText')
 
+        playerText.innerHTML = playerSign
+    }
+
+    const reset = () => {
+        for (let i = 0; i < fieldList.length; i++) {
+            fieldList[i].innerText = ''
+        }
     }
 
     return {
         updatePlayerText,
-        reset
+        updateFieldText,
+        reset,
     }
  })()
