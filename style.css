@@ -7,4 +7,7 @@
 
 .container div {
     border: 2px solid black;
+    min-width: 50px;
+    max-width: 50px;
+    min-height: 50px;
 }           

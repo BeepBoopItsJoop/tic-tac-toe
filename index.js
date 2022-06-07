@@ -1,18 +1,18 @@
  const gameBoard = (() => {
     let boardArray = new Array(9)
 
-    const getBoard = () => boardArray
+    const get = () => boardArray
 
-    const setBoard = (pos, sign) => {
-        if (pos > boardArray.length) return;
-        boardArray[pos] = sign
+    const setField = (index, sign) => {
+        if (index > boardArray.length) return;
+        boardArray[index] = sign
     } 
 
     const reset = () => boardArray = new Array(9)
 
     return {
-        getBoard,
-        setBoard,
+        get,
+        setField,
         reset,
     }
  })()
@@ -34,18 +34,23 @@ const gameController = (() => {
     let round = 1
     let isOver = false
 
-    const playRound = (pos) => {
-        if (gameBoard.getBoard()[pos] !== undefined) {console.log('field alreay played'); return}
+    const playRound = (index) => {
+        // Prevent playing a field more than once.
+        if (gameBoard.get()[index] !== undefined) return
 
-        gameBoard.setBoard(pos, getCurrentSign())
+        gameBoard.setField(index, getCurrentSign())
         // TODO
         // DOM METHOD
 
         if(checkWinner() === true) {
+            // dom method
             gameBoard.reset()
             gameController.reset()
         }
+
         round++
+
+        displayController.updatePlayerText(getCurrentSign(), index)
 
         if (round > 9) {
             // TODO DOM METHOD
@@ -75,7 +80,7 @@ const gameController = (() => {
     // rewrite this someday 
     const checkWinner = () => {
         winConditions.forEach((item, index) => { // [0, 1, 2, 3, 4, 5, 6, 7]
-            if (gameBoard.getBoard()[item[0]] === getCurrentSign() && gameBoard.getBoard()[item[1]] === getCurrentSign() && gameBoard.getBoard()[item[2]] === getCurrentSign()) {
+            if (gameBoard.get()[item[0]] === getCurrentSign() && gameBoard.get()[item[1]] === getCurrentSign() && gameBoard.get()[item[2]] === getCurrentSign()) {
                 console.log('winner!');
                 gameBoard.reset()
                 gameController.reset()
@@ -99,12 +104,26 @@ const gameController = (() => {
 const displayController = (() => {
 
     const fieldList = document.querySelectorAll('.field')
+
+    const init = (() => {
     
-    for (let i = 0; i < fieldList.length; i++) {
-        fieldList[i].addEventListener('click', (e) => {
+        for (let i = 0; i < fieldList.length; i++) {
+            fieldList[i].addEventListener('click', (e) => {
             gameController.playRound(parseInt(e.target.dataset.index))
-        })
+                
+            })
+        }
+    })()
+    
+
+    const updatePlayerText = (playerSign, fieldIndex) => {
+        const playerText = document.querySelector('.playerText')
+
+        playerText.innerHTML = playerSign
+        fieldList[fieldIndex].innerText = playerSign
     }
 
-    return {}
+    return {
+        updatePlayerText,
+    }
  })()
