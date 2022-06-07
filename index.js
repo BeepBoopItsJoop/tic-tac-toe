@@ -37,28 +37,25 @@ const gameController = (() => {
     const playRound = (index) => {
         // Prevent playing a field more than once.
         if (gameBoard.get()[index] !== undefined) return
+        if (isOver) {
+            console.log('game over')
+        return
+    }
 
-        gameBoard.setField(index, getCurrentSign())
-        // TODO
-        // DOM METHOD
+        let currentSign = getCurrentSign()
+        gameBoard.setField(index, currentSign)
 
-        if(checkWinner() === true) {
-            // dom method
-            gameBoard.reset()
-            gameController.reset()
-        }
+        checkWinner()
 
         round++
-
-        displayController.updatePlayerText(getCurrentSign(), index)
 
         if (round > 9) {
             // TODO DOM METHOD
             console.log('draw')
-            gameController.reset
-            gameBoard.reset
+            isOver = true
             return
         }
+        console.log(gameBoard.get())
     }
 
     const getCurrentSign = () => {
@@ -81,9 +78,8 @@ const gameController = (() => {
     const checkWinner = () => {
         winConditions.forEach((item, index) => { // [0, 1, 2, 3, 4, 5, 6, 7]
             if (gameBoard.get()[item[0]] === getCurrentSign() && gameBoard.get()[item[1]] === getCurrentSign() && gameBoard.get()[item[2]] === getCurrentSign()) {
-                console.log('winner!');
-                gameBoard.reset()
-                gameController.reset()
+                console.log('winner!')
+                isOver = true;
             } 
         })
     }
@@ -91,6 +87,9 @@ const gameController = (() => {
     const reset = () => {
         round = 1
         isOver = false
+        
+        gameBoard.reset();
+        displayController.reset()
     }
 
     return {
@@ -110,9 +109,11 @@ const displayController = (() => {
         for (let i = 0; i < fieldList.length; i++) {
             fieldList[i].addEventListener('click', (e) => {
             gameController.playRound(parseInt(e.target.dataset.index))
-                
             })
         }
+
+        const resetButton = document.querySelector('.reset') 
+        resetButton.addEventListener('click', gameController.reset)
     })()
     
 
@@ -123,7 +124,12 @@ const displayController = (() => {
         fieldList[fieldIndex].innerText = playerSign
     }
 
+    const reset = () => {
+
+    }
+
     return {
         updatePlayerText,
+        reset
     }
  })()
