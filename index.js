@@ -48,6 +48,11 @@ const gameController = (() => {
 
         // if (isOver) playertext method
 
+        if(isOver) {
+            displayController.updateWonPlayerText(currentSign)
+            return
+        }
+
         round++
         displayController.updatePlayerText(getCurrentSign())
 
@@ -57,7 +62,6 @@ const gameController = (() => {
             isOver = true
             return
         }
-        console.log(gameBoard.get())
     }
 
     const getCurrentSign = () => {
@@ -90,7 +94,7 @@ const gameController = (() => {
         round = 1
         isOver = false
         
-        displayController.updatePlayerText(getCurrentSign())
+        displayController.updatePlayerText('X')
 
         gameBoard.reset();
         displayController.reset()
@@ -117,7 +121,6 @@ const displayController = (() => {
         }
  
         document.querySelector('.reset') .addEventListener('click', gameController.reset)
-
         document.querySelector('.playerText').innerText = 'X'
     })()
     
@@ -129,7 +132,13 @@ const displayController = (() => {
     const updatePlayerText = (playerSign) => {
         const playerText = document.querySelector('.playerText')
 
-        playerText.innerHTML = playerSign
+        playerText.innerText = playerSign
+    }
+
+    const updateWonPlayerText = (playerSign) => {
+        const playerText = document.querySelector('.wonPlayerText')
+
+        playerText.innerText = `${playerSign} has won!`
     }
 
     const reset = () => {
@@ -140,6 +149,7 @@ const displayController = (() => {
 
     return {
         updatePlayerText,
+        updateWonPlayerText,
         updateFieldText,
         reset,
     }
