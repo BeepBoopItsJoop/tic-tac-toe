@@ -1,13 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Titan+One&display=swap');
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2.5em;
+    align-items: center; 
+
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
+}
+
 .container { 
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: repeat(3, 1fr);
-    gap: 20px;
 }
 
 .container div {
     border: 2px solid black;
-    min-width: 50px;
-    max-width: 50px;
-    min-height: 50px;
+    min-width: 150px;
+    max-width: 150px;
+    min-height: 150px;
 }           
+
+.field {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Titan One', cursive;
+    font-weight: 400;
+    font-size: 8rem;
+}
+
+.statusText {
+    font-size: 4em;
+}
+
+.reset {
+    width: 5em;
+    height: 2.5em;
+}
