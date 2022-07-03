@@ -34,30 +34,31 @@ const gameController = (() => {
     let isOver = false
 
     const playRound = (index) => {
+
         // Prevent playing a field more than once.
         if (gameBoard.get()[index] !== undefined) return
+
+        // Prevent playing after the game is over
         if (isOver) {console.log('game over'); return}
 
-        let currentSign = getCurrentSign()
-
-        displayController.updateFieldText(currentSign, index)
-        gameBoard.setField(index, currentSign)
-
+        gameBoard.setField(index, getCurrentSign())
+        displayController.updateFieldText(getCurrentSign(), index)
+        
         checkWinner()
-
-        // if (isOver) playertext method
-
         round++
-        displayController.updatePlayerText(getCurrentSign())
+        
+        displayController.generateTurnText(getCurrentSign())
+        if (isOver == true) {displayController.generateGameOverText('X')}
 
         if (round > 9 && isOver == false) {
-            // TODO DOM METHOD
-            console.log('draw')
+            displayController.generateDrawText()
+            console.log('draw!')
             isOver = true
-            return
         }
+
+
         console.log(gameBoard.get())
-    }
+    } 
 
     const getCurrentSign = () => {
         return round % 2 === 1 ? playerX.getSign() : playerO.getSign();
@@ -74,13 +75,12 @@ const gameController = (() => {
         [2, 4, 6]
     ];
 
-    // TODO
-    // rewrite this someday 
     const checkWinner = () => {
         winConditions.forEach((item, index) => { // [0, 1, 2, 3, 4, 5, 6, 7]
             if (gameBoard.get()[item[0]] === getCurrentSign() && gameBoard.get()[item[1]] === getCurrentSign() && gameBoard.get()[item[2]] === getCurrentSign()) {
                 console.log('winner!')
                 isOver = true;
+                return
             } 
         })
     }
@@ -88,8 +88,6 @@ const gameController = (() => {
     const reset = () => {
         round = 1
         isOver = false
-        
-        displayController.updatePlayerText(getCurrentSign())
 
         gameBoard.reset();
         displayController.reset()
@@ -107,6 +105,45 @@ const displayController = (() => {
 
     const fieldList = document.querySelectorAll('.field')
 
+    
+    const updateSignText = (playerSign) => {
+        const signText = document.querySelector('.signText')
+        signText.innerText = playerSign
+    }
+    const generateTurnText = (playerSign) => {
+        const statusText = document.querySelector('.statusText')
+        statusText.replaceChildren()
+
+        const TurnText = document.createElement('span')
+        TurnText.innerHTML = "It's <span class='signText'></span>'s turn"
+
+        statusText.append(TurnText)
+        updateSignText(playerSign)
+    }
+
+    const generateGameOverText = (playerSign) => {
+        const statusText = document.querySelector('.statusText')
+        statusText.replaceChildren()
+
+        const gameOverText = document.createElement('span')
+        gameOverText.innerHTML = "<span class='signText'></span> has won!"
+
+        statusText.append(gameOverText)
+        updateSignText(playerSign)
+
+    }
+
+    const generateDrawText = () => {
+        const statusText = document.querySelector('.statusText')
+        statusText.replaceChildren()
+
+        const drawText = document.createElement('span')
+        drawText.innerHTML = "It's a draw!"
+
+        statusText.append(drawText)
+
+    }
+
     const init = (() => {
     
         for (let i = 0; i < fieldList.length; i++) {
@@ -117,7 +154,7 @@ const displayController = (() => {
  
         document.querySelector('.reset') .addEventListener('click', gameController.reset)
 
-        document.querySelector('.playerText').innerText = 'X'
+        generateTurnText('X')
     })()
     
 
@@ -125,20 +162,19 @@ const displayController = (() => {
         fieldList[fieldIndex].innerText = playerSign
     }
 
-    const updatePlayerText = (playerSign) => {
-        const playerText = document.querySelector('.playerText')
-
-        playerText.innerHTML = playerSign
-    }
-
     const reset = () => {
         for (let i = 0; i < fieldList.length; i++) {
             fieldList[i].innerText = ''
         }
+        generateTurnText('X')
     }
 
     return {
-        updatePlayerText,
+        generateTurnText,
+        generateGameOverText,
+        generateDrawText,
+
+        updateSignText,
         updateFieldText,
         reset,
     }
