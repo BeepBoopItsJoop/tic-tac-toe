@@ -30,7 +30,6 @@ const gameController = (() => {
     
     const playerX = Player('X')
     const playerO = Player('O')
-
     let round = 1
     let isOver = false
 
@@ -51,7 +50,7 @@ const gameController = (() => {
         round++
         displayController.updatePlayerText(getCurrentSign())
 
-        if (round > 9) {
+        if (round > 9 && isOver == false) {
             // TODO DOM METHOD
             console.log('draw')
             isOver = true
