@@ -24,6 +24,8 @@ main {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     background-color: #C4DFAA;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
 }
 
 .field {
@@ -33,18 +35,20 @@ main {
     font-family: 'Titan One', cursive;
     font-weight: 400;
     font-size: 8rem;
-    border: 2px solid black;
+
+    border-top: 1px solid black;
+    border-right: 1px solid black;
 
     min-width: 150px;
     max-width: 150px;
     max-height: 150px;
     min-height: 150px;
-    opacity: .75;
+    
     transition: opacity 2s ease-out 0;
 }
 
 .field:hover {
-
+    
 }
 
 .statusText {
@@ -57,10 +61,16 @@ main {
     background-color: hsl(151, 34%, 67%);
     border-radius: 5px;
     border-color: black;
-    transition: background-color 0.5s ease-out 0s;
+    transition: background-color 0.25s ease-out 0s;
     font-size: 2em;
 }
 
 .reset:hover {
     background-color: hsl(150, 64%, 80%);
+    cursor: pointer;
+}
+
+.reset:active {
+    background-color: hsl(150, 64%, 40%);
+
 }
