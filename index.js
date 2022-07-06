@@ -39,25 +39,29 @@ const gameController = (() => {
         if (gameBoard.get()[index] !== undefined) return
 
         // Prevent playing after the game is over
-        if (isOver) {console.log('game over'); return}
+        if (isOver) return
 
-        gameBoard.setField(index, getCurrentSign())
-        displayController.updateFieldText(getCurrentSign(), index)
+        let currentSign = getCurrentSign()
+
+        // Updating board and stuff...
+        gameBoard.setField(index, currentSign)
+        displayController.updateFieldText(currentSign, index)
         
         checkWinner()
         round++
+
+        currentSign = getCurrentSign()
         
-        displayController.generateTurnText(getCurrentSign())
+        // Generating status text for next turn
+        displayController.generateTurnText(currentSign)
+        // Generating status text for next round, if new game
         if (isOver == true) {displayController.generateGameOverText('X')}
 
+        // Draw logic
         if (round > 9 && isOver == false) {
             displayController.generateDrawText()
-            console.log('draw!')
             isOver = true
         }
-
-
-        console.log(gameBoard.get())
     } 
 
     const getCurrentSign = () => {
@@ -75,12 +79,12 @@ const gameController = (() => {
         [2, 4, 6]
     ];
 
+    // TODO
+    // Rewrite someday, is a bit faulty at times
     const checkWinner = () => {
         winConditions.forEach((item, index) => { // [0, 1, 2, 3, 4, 5, 6, 7]
             if (gameBoard.get()[item[0]] === getCurrentSign() && gameBoard.get()[item[1]] === getCurrentSign() && gameBoard.get()[item[2]] === getCurrentSign()) {
-                console.log('winner!')
                 isOver = true;
-                return
             } 
         })
     }
@@ -105,7 +109,9 @@ const displayController = (() => {
 
     const fieldList = document.querySelectorAll('.field')
 
-    
+    // TODO
+    // Tidy up this ugly mess
+
     const updateSignText = (playerSign) => {
         const signText = document.querySelector('.signText')
         signText.innerText = playerSign
