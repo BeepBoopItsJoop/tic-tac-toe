@@ -1,4 +1,4 @@
- const gameBoard = (() => {
+const gameBoard = (() => {
     let boardArray = new Array(9)
 
     const get = () => boardArray
@@ -49,13 +49,11 @@ const gameController = (() => {
         
         checkWinner()
         round++
-
-        currentSign = getCurrentSign()
         
         // Generating status text for next turn
-        displayController.generateTurnText(currentSign)
-        // Generating status text for next round, if new game
-        if (isOver == true) {displayController.generateGameOverText('X')}
+        displayController.generateTurnText(getCurrentSign())
+        // Generating status text for next turn
+        if (isOver == true) {displayController.generateGameOverText(currentSign)}
 
         // Draw logic
         if (round > 9 && isOver == false) {
@@ -116,6 +114,7 @@ const displayController = (() => {
         const signText = document.querySelector('.signText')
         signText.innerText = playerSign
     }
+
     const generateTurnText = (playerSign) => {
         const statusText = document.querySelector('.statusText')
         statusText.replaceChildren()
@@ -136,29 +135,25 @@ const displayController = (() => {
 
         statusText.append(gameOverText)
         updateSignText(playerSign)
-
     }
 
     const generateDrawText = () => {
         const statusText = document.querySelector('.statusText')
-        statusText.replaceChildren()
 
         const drawText = document.createElement('span')
-        drawText.innerHTML = "It's a draw!"
-
-        statusText.append(drawText)
-
+        drawText.innerText = "It's a draw!"
+        statusText.replaceChildren(drawText)
     }
 
     const init = (() => {
-    
+
+        // Add the event listeners
         for (let i = 0; i < fieldList.length; i++) {
             fieldList[i].addEventListener('click', (e) => {
             gameController.playRound(parseInt(e.target.dataset.index))
             })
         }
- 
-        document.querySelector('.reset') .addEventListener('click', gameController.reset)
+        document.querySelector('.reset').addEventListener('click', gameController.reset)
 
         generateTurnText('X')
     })()
