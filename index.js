@@ -109,6 +109,7 @@ const displayController = (() => {
 
     // TODO
     // Tidy up this ugly mess
+    // merge the functiuons into onea
 
     const updateSignText = (playerSign) => {
         const signText = document.querySelector('.signText')
@@ -117,23 +118,21 @@ const displayController = (() => {
 
     const generateTurnText = (playerSign) => {
         const statusText = document.querySelector('.statusText')
-        statusText.replaceChildren()
-
+        
         const TurnText = document.createElement('span')
         TurnText.innerHTML = "It's <span class='signText'></span>'s turn"
-
-        statusText.append(TurnText)
+        
+        statusText.replaceChildren(TurnText)
         updateSignText(playerSign)
     }
 
     const generateGameOverText = (playerSign) => {
         const statusText = document.querySelector('.statusText')
-        statusText.replaceChildren()
-
+        
         const gameOverText = document.createElement('span')
         gameOverText.innerHTML = "<span class='signText'></span> has won!"
-
-        statusText.append(gameOverText)
+        
+        statusText.replaceChildren(gameOverText)
         updateSignText(playerSign)
     }
 
@@ -147,7 +146,7 @@ const displayController = (() => {
 
     const init = (() => {
 
-        // Add the event listeners
+        // Adds the event listeners
         for (let i = 0; i < fieldList.length; i++) {
             fieldList[i].addEventListener('click', (e) => {
             gameController.playRound(parseInt(e.target.dataset.index))
